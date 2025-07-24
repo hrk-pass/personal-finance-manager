@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/contexts/AuthContext';
+import AuthGuard from '@/components/AuthGuard';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,9 +20,11 @@ export default function RootLayout({
     <html lang="ja">
       <body className={inter.className}>
         <AuthProvider>
-          <main className="min-h-screen bg-gray-50">
-            {children}
-          </main>
+          <AuthGuard>
+            <main className="min-h-screen bg-gray-50">
+              {children}
+            </main>
+          </AuthGuard>
         </AuthProvider>
       </body>
     </html>
