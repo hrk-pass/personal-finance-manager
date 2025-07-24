@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HomeIcon, WalletIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
