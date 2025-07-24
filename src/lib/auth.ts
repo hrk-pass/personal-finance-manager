@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signOut, AuthError } from 'firebase/auth';
 import { auth } from './firebase';
 
 export async function signInWithGoogle() {
@@ -7,11 +7,12 @@ export async function signInWithGoogle() {
     const result = await signInWithPopup(auth, provider);
     console.log('ログイン成功:', result.user);
     return result.user;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Googleログインエラー:', error);
-    if (error.code === 'auth/popup-closed-by-user') {
+    const authError = error as AuthError;
+    if (authError.code === 'auth/popup-closed-by-user') {
       throw new Error('ログインがキャンセルされました');
-    } else if (error.code === 'auth/popup-blocked') {
+    } else if (authError.code === 'auth/popup-blocked') {
       throw new Error('ポップアップがブロックされました。ポップアップを許可してください。');
     } else {
       throw new Error('ログインに失敗しました。もう一度お試しください。');
