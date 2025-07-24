@@ -18,9 +18,6 @@ const nextConfig = {
   images: {
     domains: ['lh3.googleusercontent.com'],
   },
-  experimental: {
-    optimizeCss: true,
-  },
 }
 
 export default nextConfig; 
