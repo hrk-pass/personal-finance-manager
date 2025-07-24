@@ -14,6 +14,13 @@ const nextConfig = {
     }
     return config;
   },
+  optimizeFonts: true,
+  images: {
+    domains: ['lh3.googleusercontent.com'],
+  },
+  experimental: {
+    optimizeCss: true,
+  },
 }
 
 export default nextConfig; 
