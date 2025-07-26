@@ -84,7 +84,7 @@ export default function ReportForm({ report, categories, onClose, onSuccess }: R
           </label>
           <select
             value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value as 'expense' | 'income' | 'balance' | 'budget' })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
           >
             <option value="expense">支出レポート</option>
@@ -133,7 +133,7 @@ export default function ReportForm({ report, categories, onClose, onSuccess }: R
           </label>
           <select
             value={formData.groupBy}
-            onChange={(e) => setFormData({ ...formData, groupBy: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, groupBy: e.target.value as 'day' | 'week' | 'month' | 'year' | 'category' })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
           >
             <option value="day">日別</option>
