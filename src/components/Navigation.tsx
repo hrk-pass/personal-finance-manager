@@ -1,91 +1,53 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Navigation() {
-  const pathname = usePathname();
-  const { user, signOut } = useAuth();
-
-  const isActive = (path: string) => {
-    return pathname === path;
-  };
-
-  if (!user) return null;
+  const { user } = useAuth();
 
   return (
-    <nav className="bg-white shadow-md border-b border-secondary-200">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between h-16">
+    <nav className="bg-white shadow">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between">
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-primary-700">
-                家計簿
+            <div className="flex flex-shrink-0 items-center">
+              <Link href="/" className="text-xl font-bold text-indigo-600">
+                家計簿アプリ
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 href="/"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/') 
-                    ? 'border-primary-500 text-primary-700'
-                    : 'border-transparent text-secondary-500 hover:border-secondary-300 hover:text-secondary-700'
-                }`}
+                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
               >
-                ダッシュボード
-              </Link>
-              <Link
-                href="/transactions"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/transactions')
-                    ? 'border-primary-500 text-primary-700'
-                    : 'border-transparent text-secondary-500 hover:border-secondary-300 hover:text-secondary-700'
-                }`}
-              >
-                取引
+                ホーム
               </Link>
               <Link
                 href="/accounts"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/accounts')
-                    ? 'border-primary-500 text-primary-700'
-                    : 'border-transparent text-secondary-500 hover:border-secondary-300 hover:text-secondary-700'
-                }`}
+                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
               >
-                口座
+                アカウント管理
               </Link>
               <Link
-                href="/budgets"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/budgets')
-                    ? 'border-primary-500 text-primary-700'
-                    : 'border-transparent text-secondary-500 hover:border-secondary-300 hover:text-secondary-700'
-                }`}
+                href="/transactions"
+                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
               >
-                予算
-              </Link>
-              <Link
-                href="/reports"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/reports')
-                    ? 'border-primary-500 text-primary-700'
-                    : 'border-transparent text-secondary-500 hover:border-secondary-300 hover:text-secondary-700'
-                }`}
-              >
-                レポート
+                取引履歴
               </Link>
             </div>
           </div>
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <button
-                onClick={() => signOut()}
-                className="btn-primary"
+            {user ? (
+              <div className="text-sm text-gray-500">{user.email}</div>
+            ) : (
+              <Link
+                href="/auth"
+                className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
               >
-                ログアウト
-              </button>
-            </div>
+                ログイン
+              </Link>
+            )}
           </div>
         </div>
       </div>
