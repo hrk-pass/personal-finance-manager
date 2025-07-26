@@ -62,7 +62,7 @@ export default function ReportsPage() {
       {showForm ? (
         <div className="mb-8">
           <ReportForm
-            report={selectedReport}
+            report={selectedReport ?? undefined}
             categories={categories}
             onClose={() => {
               setShowForm(false);
