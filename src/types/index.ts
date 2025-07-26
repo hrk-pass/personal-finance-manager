@@ -18,7 +18,8 @@ export type AccountType =
   | 'investment' 
   | 'loan' 
   | 'emoney' 
-  | 'point';
+  | 'point'
+  | 'wallet';
 
 export type Account = {
   id: string;
