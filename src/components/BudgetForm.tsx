@@ -122,7 +122,7 @@ export default function BudgetForm({ budget, categories, onClose, onSuccess }: B
           </label>
           <select
             value={formData.period}
-            onChange={(e) => setFormData({ ...formData, period: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, period: e.target.value as 'monthly' | 'yearly' })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
           >
             <option value="monthly">毎月</option>
