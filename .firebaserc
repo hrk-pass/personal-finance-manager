@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "firebase login": "core-owner-auth-dev"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
