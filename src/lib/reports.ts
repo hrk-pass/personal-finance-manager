@@ -40,8 +40,14 @@ export const generateReport = async (userId: string, reportData: Omit<Report, 'i
 
     return {
       id: reportRef.id,
-      summary,
-      transactions: transactionData,
+      userId,
+      name: reportData.name,
+      type: reportData.type,
+      dateRange: reportData.dateRange,
+      filters: reportData.filters,
+      groupBy: reportData.groupBy,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
   } catch (error) {
     console.error('Error generating report:', error);
