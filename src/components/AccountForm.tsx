@@ -12,6 +12,10 @@ export default function AccountForm({ onSubmit, initialData, buttonText }: Accou
     name: initialData?.name || '',
     type: initialData?.type || 'bank',
     balance: initialData?.balance || 0,
+    currency: initialData?.currency || 'JPY',
+    color: initialData?.color || '#1976d2',
+    isArchived: initialData?.isArchived ?? false,
+    metadata: initialData?.metadata || {},
   });
 
   const handleSubmit = (e: React.FormEvent) => {
