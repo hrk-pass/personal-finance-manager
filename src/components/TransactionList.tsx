@@ -55,25 +55,45 @@ export default function TransactionList({ transactions, accounts, onEdit, onDele
 
   return (
     <div className="space-y-8">
-      {transactionsByAccount.map(({ account, transactions: accountTransactions, balance }) => (
-        <div key={account.id} className="overflow-hidden bg-white shadow sm:rounded-lg">
-          <div className="border-b border-gray-200 bg-gray-50 px-4 py-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium text-gray-900">{account.name}</h3>
-              <span className={`text-lg font-medium ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ¥{balance.toLocaleString()}
-              </span>
+      {transactionsByAccount.map(({ account, transactions: accountTransactions }) => {
+        // 取引履歴を日付降順（新しい順）でソート
+        const sortedTransactions = [...accountTransactions].sort((a, b) => b.date.getTime() - a.date.getTime());
+        // 各取引ごとの残高を計算（running balance）
+        let runningBalance = account.balance;
+        const transactionsWithBalance = sortedTransactions.map((transaction) => {
+          // 現在の残高を保存
+          const afterBalance = runningBalance;
+          // 取引内容に応じてrunningBalanceを逆計算
+          if (transaction.accountId === account.id) {
+            if (transaction.type === 'income') {
+              runningBalance -= transaction.amount;
+            } else if (transaction.type === 'expense') {
+              runningBalance += transaction.amount;
+            } else if (transaction.type === 'transfer') {
+              runningBalance += transaction.amount;
+            }
+          } else if (transaction.type === 'transfer' && transaction.toAccountId === account.id) {
+            runningBalance -= transaction.amount;
+          }
+          return { transaction, afterBalance };
+        });
+        return (
+          <div key={account.id} className="overflow-hidden bg-white shadow sm:rounded-lg">
+            <div className="border-b border-gray-200 bg-gray-50 px-4 py-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium text-gray-900">{account.name}</h3>
+                <span className={`text-lg font-medium ${account.balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  ¥{account.balance.toLocaleString()}
+                </span>
+              </div>
             </div>
-          </div>
-          <ul role="list" className="divide-y divide-gray-200">
-            {accountTransactions.length === 0 ? (
-              <li className="px-4 py-4 text-center text-gray-500">
-                取引履歴がありません
-              </li>
-            ) : (
-              accountTransactions
-                .sort((a, b) => b.date.getTime() - a.date.getTime())
-                .map((transaction) => (
+            <ul role="list" className="divide-y divide-gray-200">
+              {transactionsWithBalance.length === 0 ? (
+                <li className="px-4 py-4 text-center text-gray-500">
+                  取引履歴がありません
+                </li>
+              ) :
+                transactionsWithBalance.map(({ transaction, afterBalance }) => (
                   <li key={transaction.id} className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
@@ -111,6 +131,8 @@ export default function TransactionList({ transactions, accounts, onEdit, onDele
                             : '-'}
                           ¥{transaction.amount.toLocaleString()}
                         </span>
+                        {/* 取引後残高を表示 */}
+                        <span className="text-xs text-gray-500 ml-2">残高: ¥{afterBalance.toLocaleString()}</span>
                         <button
                           onClick={() => onEdit(transaction)}
                           className="rounded bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600 shadow-sm hover:bg-blue-100"
@@ -127,10 +149,11 @@ export default function TransactionList({ transactions, accounts, onEdit, onDele
                     </div>
                   </li>
                 ))
-            )}
-          </ul>
-        </div>
-      ))}
+              }
+            </ul>
+          </div>
+        );
+      })}
     </div>
   );
 } 
