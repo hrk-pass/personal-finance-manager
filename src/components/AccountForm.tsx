@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Account } from '@/types';
 
 type AccountFormProps = {
-  onSubmit: (data: Omit<Account, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => void;
+  onSubmit: (data: Omit<Account, 'id' | 'createdAt' | 'updatedAt'>) => void;
   initialData?: Partial<Account>;
   buttonText: string;
 };

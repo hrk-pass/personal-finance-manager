@@ -1,14 +1,13 @@
 import { db } from './firebase';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, serverTimestamp } from 'firebase/firestore';
 import { Account } from '@/types';
 
 const ACCOUNTS_COLLECTION = 'accounts';
 
-export const createAccount = async (userId: string, accountData: Omit<Account, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => {
+export const createAccount = async (accountData: Omit<Account, 'id' | 'createdAt' | 'updatedAt'>) => {
   try {
     const docRef = await addDoc(collection(db, ACCOUNTS_COLLECTION), {
       ...accountData,
-      userId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
@@ -19,7 +18,7 @@ export const createAccount = async (userId: string, accountData: Omit<Account, '
   }
 };
 
-export const updateAccount = async (accountId: string, accountData: Partial<Omit<Account, 'id' | 'createdAt' | 'updatedAt' | 'userId'>>) => {
+export const updateAccount = async (accountId: string, accountData: Partial<Omit<Account, 'id' | 'createdAt' | 'updatedAt'>>) => {
   try {
     const accountRef = doc(db, ACCOUNTS_COLLECTION, accountId);
     await updateDoc(accountRef, {
@@ -42,10 +41,9 @@ export const deleteAccount = async (accountId: string) => {
   }
 };
 
-export const getAccounts = async (userId: string): Promise<Account[]> => {
+export const getAccounts = async (): Promise<Account[]> => {
   try {
-    const q = query(collection(db, ACCOUNTS_COLLECTION), where('userId', '==', userId));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(collection(db, ACCOUNTS_COLLECTION));
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),

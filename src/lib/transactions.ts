@@ -6,8 +6,6 @@ import {
   deleteDoc,
   doc,
   getDocs,
-  query,
-  where,
   serverTimestamp,
   runTransaction,
 } from 'firebase/firestore';
@@ -17,15 +15,13 @@ const TRANSACTIONS_COLLECTION = 'transactions';
 const ACCOUNTS_COLLECTION = 'accounts';
 
 export const createTransaction = async (
-  userId: string,
-  transactionData: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
+  transactionData: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>
 ) => {
   try {
     await runTransaction(db, async (transaction) => {
       // 新しい取引を作成
       const transactionRef = await addDoc(collection(db, TRANSACTIONS_COLLECTION), {
         ...transactionData,
-        userId,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -77,7 +73,7 @@ export const createTransaction = async (
 export const updateTransaction = async (
   transactionId: string,
   oldData: Transaction,
-  newData: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
+  newData: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>
 ) => {
   try {
     await runTransaction(db, async (transaction) => {
@@ -215,13 +211,9 @@ export const deleteTransaction = async (transactionId: string, transactionData: 
   }
 };
 
-export const getTransactions = async (userId: string): Promise<Transaction[]> => {
+export const getTransactions = async (): Promise<Transaction[]> => {
   try {
-    const q = query(
-      collection(db, TRANSACTIONS_COLLECTION),
-      where('userId', '==', userId)
-    );
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(collection(db, TRANSACTIONS_COLLECTION));
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),

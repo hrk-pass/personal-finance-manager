@@ -22,7 +22,7 @@ export default function AccountsPage() {
   const loadAccounts = async () => {
     if (!user) return;
     try {
-      const accountsData = await getAccounts(user.id);
+      const accountsData = await getAccounts();
       setAccounts(accountsData);
     } catch (error) {
       console.error('Error loading accounts:', error);
@@ -30,10 +30,10 @@ export default function AccountsPage() {
     }
   };
 
-  const handleCreateAccount = async (data: Omit<Account, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => {
+  const handleCreateAccount = async (data: Omit<Account, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!user) return;
     try {
-      await createAccount(user.id, data);
+      await createAccount(data);
       await loadAccounts();
       setIsAddingAccount(false);
     } catch (error) {
@@ -42,7 +42,7 @@ export default function AccountsPage() {
     }
   };
 
-  const handleUpdateAccount = async (data: Omit<Account, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => {
+  const handleUpdateAccount = async (data: Omit<Account, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!editingAccount) return;
     try {
       await updateAccount(editingAccount.id, data);

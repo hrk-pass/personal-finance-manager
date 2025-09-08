@@ -25,8 +25,8 @@ export default function TransactionsPage() {
     if (!user) return;
     try {
       const [transactionsData, accountsData] = await Promise.all([
-        getTransactions(user.id),
-        getAccounts(user.id),
+        getTransactions(),
+        getAccounts(),
       ]);
       setTransactions(transactionsData.sort((a, b) => b.date.getTime() - a.date.getTime()));
       setAccounts(accountsData);
@@ -36,10 +36,10 @@ export default function TransactionsPage() {
     }
   };
 
-  const handleCreateTransaction = async (data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => {
+  const handleCreateTransaction = async (data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!user) return;
     try {
-      await createTransaction(user.id, data);
+      await createTransaction(data);
       await loadData();
       setIsAddingTransaction(false);
     } catch (error) {
@@ -48,7 +48,7 @@ export default function TransactionsPage() {
     }
   };
 
-  const handleUpdateTransaction = async (data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => {
+  const handleUpdateTransaction = async (data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!editingTransaction) return;
     try {
       await updateTransaction(editingTransaction.id, editingTransaction, data);

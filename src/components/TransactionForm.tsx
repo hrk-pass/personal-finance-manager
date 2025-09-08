@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Account, Transaction, TransactionType } from '@/types';
 
 type TransactionFormProps = {
-  onSubmit: (data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => void;
+  onSubmit: (data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => void;
   accounts: Account[];
   initialData?: Partial<Transaction>;
   buttonText: string;

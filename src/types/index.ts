@@ -11,14 +11,12 @@ export type Account = {
   balance: number;
   createdAt: Date;
   updatedAt: Date;
-  userId: string;
 };
 
 export type TransactionType = 'income' | 'expense' | 'transfer';
 
 export type Transaction = {
   id: string;
-  userId: string;
   accountId: string;
   type: TransactionType;
   amount: number;

@@ -2,18 +2,14 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // アカウントのセキュリティルール
+    // アカウントのセキュリティルール - 全ての認証済みユーザーがアクセス可能
     match /accounts/{accountId} {
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
-      allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow read, write: if request.auth != null;
     }
 
-    // 取引のセキュリティルール
+    // 取引のセキュリティルール - 全ての認証済みユーザーがアクセス可能
     match /transactions/{transactionId} {
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
-      allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow read, write: if request.auth != null;
     }
   }
 } 
